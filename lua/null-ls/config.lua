@@ -22,6 +22,10 @@ local defaults = {
     },
     root_dir = u.root_pattern(".null-ls-root", "Makefile", ".git"),
     update_in_insert = false,
+    handlers = {
+        ["textDocument/hover"] = vim.lsp.handlers.hover,
+        ["textDocument/signatureHelp"] = vim.lsp.handlers.signature_help,
+    },
     -- prevent double setup
     _setup = false,
 }
