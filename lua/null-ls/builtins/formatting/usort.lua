@@ -4,16 +4,19 @@ local methods = require("null-ls.methods")
 local FORMATTING = methods.internal.FORMATTING
 
 return h.make_builtin({
-    name = "fourmolu",
+    name = "usort",
     meta = {
-        url = "https://hackage.haskell.org/package/fourmolu",
-        description = "Fourmolu is a formatter for Haskell source code.",
+        url = "https://github.com/facebookexperimental/usort",
+        description = "Safe, minimal import sorting for Python projects.",
     },
     method = FORMATTING,
-    filetypes = { "haskell" },
+    filetypes = { "python" },
     generator_opts = {
-        command = "fourmolu",
-        args = { "--stdin-input-file", "$FILEPATH" },
+        command = "usort",
+        args = {
+            "format",
+            "-",
+        },
         to_stdin = true,
     },
     factory = h.formatter_factory,

@@ -19,20 +19,22 @@ null-ls exposes built-ins on `null_ls.builtins`, which contains the following
 groups of sources:
 
 ```lua
+local null_ls = require("null-ls")
+
 -- code action sources
-null_ls.builtins.code_actions
+local code_actions = null_ls.builtins.code_actions
 
 -- diagnostic sources
-null_ls.builtins.diagnostics
+local diagnostics = null_ls.builtins.diagnostics
 
 -- formatting sources
-null_ls.builtins.formatting
+local formatting = null_ls.builtins.formatting
 
 -- hover sources
-null_ls.builtins.hover
+local hover = null_ls.builtins.hover
 
 -- completion sources
-null_ls.builtins.completion
+local completion = null_ls.builtins.completion
 ```
 
 You can then register sources by passing a `sources` list into your `setup`
@@ -115,9 +117,9 @@ To add more arguments to a source's defaults, use `extra_args`:
 ```lua
 local sources = {
     null_ls.builtins.formatting.shfmt.with({
-        extra_args = { "-i", "2", "-ci" }
-      })
-  }
+        extra_args = { "-i", "2", "-ci" },
+    }),
+}
 ```
 
 You can also override a source's arguments entirely using `with({ args = your_args })`.
@@ -151,9 +153,9 @@ operating system variables.
 ```lua
 local sources = {
     null_ls.builtins.formatting.prettierd.with({
-          env = {
-            PRETTIERD_DEFAULT_CONFIG = vim.fn.expand "~/.config/nvim/utils/linter-config/.prettierrc.json",
-          }
+        env = {
+            PRETTIERD_DEFAULT_CONFIG = vim.fn.expand("~/.config/nvim/utils/linter-config/.prettierrc.json"),
+        },
     }),
 }
 ```
@@ -171,6 +173,22 @@ local sources = {
 }
 ```
 
+### Filtering
+
+You can filter generator results using the `filter` option. The option should
+be a function that returns `true` to keep the result, and `false` or `nil` to ignore it.
+
+```lua
+local sources = {
+    null_ls.builtins.diagnostics.eslint_d.with({
+        -- ignore prettier warnings from eslint-plugin-prettier
+        filter = function(diagnostic)
+            return diagnostic.code ~= "prettier/prettier"
+        end,
+    }),
+}
+```
+
 ### Diagnostics format
 
 For diagnostics sources, you can change the format of diagnostic messages by
@@ -180,7 +198,7 @@ setting `diagnostics_format`:
 local sources = {
     -- will show code and source name
     null_ls.builtins.diagnostics.shellcheck.with({
-        diagnostics_format = "[#{c}] #{m} (#{s})"
+        diagnostics_format = "[#{c}] #{m} (#{s})",
     }),
 }
 ```
@@ -206,8 +224,7 @@ diagnostic.
 local sources = {
     null_ls.builtins.diagnostics.write_good.with({
         diagnostics_postprocess = function(diagnostic)
-            diagnostic.severity = diagnostic.message:find("really")
-                and vim.diagnostic.severity["ERROR"]
+            diagnostic.severity = diagnostic.message:find("really") and vim.diagnostic.severity["ERROR"]
                 or vim.diagnostic.severity["WARN"]
         end,
     }),
@@ -248,7 +265,7 @@ local sources = {
         cwd = function(params)
             -- falls back to root if return value is nil
             return params.root:match("my-special-project") and "my-special-cwd"
-        end
+        end,
     }),
 }
 ```
@@ -263,7 +280,7 @@ set a different `timeout`:
 local sources = {
     null_ls.builtins.formatting.prettier.with({
         -- milliseconds
-        timeout = 10000
+        timeout = 10000,
     }),
 }
 ```
@@ -271,21 +288,30 @@ local sources = {
 Specifying a timeout with a value less than zero will prevent the command from
 ever timing out.
 
-### Running in place
+### Temp file sources
 
-Some builtins write the buffer to a temp file before being executed. This can be
-turned off by setting `to_temp_file` to `false`:
+Some builtins write the buffer's content to a temp file before command
+execution, as a workaround for commands that don't accept `stdin`. null-ls uses
+the following logic to determine where to put temp files:
+
+1. On Unix, use `XDG_RUNTIME_DIR` if set. Otherwise, use `/tmp`.
+2. On Windows, use `TEMP`
+
+In most cases, temp file sources will work as expected without user
+intervention. For special cases, you can turn this off by setting `to_temp_file`
+to `false`:
 
 ```lua
 local sources = {
     null_ls.builtins.formatting.phpstan.with({
-        to_temp_file = false
+        to_temp_file = false,
     }),
 }
 ```
 
-If overriding this it is recommended to switch diagnostics to
-[run on save](#diagnostics-on-save).
+For diagnostics sources, you should also update the source to [run on
+save](#diagnostics-on-save), since otherwise diagnostics will go out of sync
+with buffer changes.
 
 ## Using local executables
 
@@ -319,7 +345,7 @@ if the command is not available on your `$PATH`:
 ```lua
 local sources = {
     null_ls.builtins.formatting.prettier.with({
-        command = "/path/to/prettier"
+        command = "/path/to/prettier",
     }),
 }
 ```

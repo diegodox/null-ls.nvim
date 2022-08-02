@@ -16,10 +16,19 @@ return {
   bean_format = {
     filetypes = { "beancount" }
   },
+  beautysh = {
+    filetypes = { "bash", "csh", "ksh", "sh", "zsh" }
+  },
   bibclean = {
     filetypes = { "bib" }
   },
   black = {
+    filetypes = { "python" }
+  },
+  blade_formatter = {
+    filetypes = { "blade" }
+  },
+  blue = {
     filetypes = { "python" }
   },
   brittany = {
@@ -34,8 +43,11 @@ return {
   cabal_fmt = {
     filetypes = { "cabal" }
   },
+  cbfmt = {
+    filetypes = { "markdown", "org" }
+  },
   clang_format = {
-    filetypes = { "c", "cpp", "cs", "java" }
+    filetypes = { "c", "cpp", "cs", "java", "cuda" }
   },
   cljstyle = {
     filetypes = { "clojure" }
@@ -48,6 +60,9 @@ return {
   },
   crystal_format = {
     filetypes = { "crystal" }
+  },
+  csharpier = {
+    filetypes = { "cs" }
   },
   cue_fmt = {
     filetypes = { "cue" }
@@ -112,6 +127,9 @@ return {
   goimports = {
     filetypes = { "go" }
   },
+  goimports_reviser = {
+    filetypes = { "go" }
+  },
   golines = {
     filetypes = { "go" }
   },
@@ -160,6 +178,15 @@ return {
   nixpkgs_fmt = {
     filetypes = { "nix" }
   },
+  ocdc = {
+    filetypes = { "markdown" }
+  },
+  packer = {
+    filetypes = { "hcl" }
+  },
+  perlimports = {
+    filetypes = { "perl" }
+  },
   perltidy = {
     filetypes = { "perl" }
   },
@@ -170,6 +197,9 @@ return {
     filetypes = { "php" }
   },
   phpcsfixer = {
+    filetypes = { "php" }
+  },
+  pint = {
     filetypes = { "php" }
   },
   prettier = {
@@ -235,6 +265,9 @@ return {
   shfmt = {
     filetypes = { "sh" }
   },
+  sql_formatter = {
+    filetypes = { "sql" }
+  },
   sqlfluff = {
     filetypes = { "sql" }
   },
@@ -282,6 +315,9 @@ return {
   },
   uncrustify = {
     filetypes = { "c", "cpp", "cs", "java" }
+  },
+  usort = {
+    filetypes = { "python" }
   },
   verible_verilog_format = {
     filetypes = { "verilog", "systemverilog" }

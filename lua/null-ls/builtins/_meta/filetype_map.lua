@@ -10,11 +10,17 @@ return {
   asm = {
     formatting = { "asmfmt" }
   },
+  bash = {
+    formatting = { "beautysh" }
+  },
   beancount = {
     formatting = { "bean_format" }
   },
   bib = {
     formatting = { "bibclean" }
+  },
+  blade = {
+    formatting = { "blade_formatter" }
   },
   bzl = {
     diagnostics = { "buildifier" },
@@ -45,11 +51,17 @@ return {
     formatting = { "crystal_format" }
   },
   cs = {
-    formatting = { "astyle", "clang_format", "uncrustify" }
+    formatting = { "astyle", "clang_format", "csharpier", "uncrustify" }
+  },
+  csh = {
+    formatting = { "beautysh" }
   },
   css = {
     diagnostics = { "stylelint" },
     formatting = { "prettier", "prettier_d_slim", "prettierd", "stylelint" }
+  },
+  cuda = {
+    formatting = { "clang_format" }
   },
   cue = {
     diagnostics = { "cue_fmt" },
@@ -118,10 +130,13 @@ return {
   gitrebase = {
     code_actions = { "gitrebase" }
   },
+  glsl = {
+    diagnostics = { "glslc" }
+  },
   go = {
     code_actions = { "refactoring" },
     diagnostics = { "golangci_lint", "revive", "semgrep", "staticcheck" },
-    formatting = { "gofmt", "gofumpt", "goimports", "golines" }
+    formatting = { "gofmt", "gofumpt", "goimports", "goimports_reviser", "golines" }
   },
   graphql = {
     formatting = { "prettier", "prettier_d_slim", "prettierd" }
@@ -134,6 +149,9 @@ return {
   },
   haskell = {
     formatting = { "brittany", "fourmolu" }
+  },
+  hcl = {
+    formatting = { "packer" }
   },
   html = {
     diagnostics = { "tidy" },
@@ -162,7 +180,7 @@ return {
     formatting = { "djhtml", "djlint" }
   },
   json = {
-    diagnostics = { "jsonlint" },
+    diagnostics = { "cfn_lint", "jsonlint" },
     formatting = { "fixjson", "jq", "json_tool", "prettier", "prettier_d_slim", "prettierd" }
   },
   jsonc = {
@@ -171,6 +189,9 @@ return {
   kotlin = {
     diagnostics = { "ktlint" },
     formatting = { "ktlint" }
+  },
+  ksh = {
+    formatting = { "beautysh" }
   },
   less = {
     diagnostics = { "stylelint" },
@@ -187,7 +208,7 @@ return {
   markdown = {
     code_actions = { "proselint" },
     diagnostics = { "alex", "markdownlint", "mdl", "proselint", "vale", "write_good" },
-    formatting = { "markdownlint", "mdformat", "prettier", "prettier_d_slim", "prettierd", "remark", "terrafmt" },
+    formatting = { "cbfmt", "markdownlint", "mdformat", "ocdc", "prettier", "prettier_d_slim", "prettierd", "remark", "terrafmt" },
     hover = { "dictionary" }
   },
   matlab = {
@@ -204,18 +225,21 @@ return {
     diagnostics = { "deadnix", "statix" },
     formatting = { "alejandra", "nixfmt", "nixpkgs_fmt" }
   },
+  org = {
+    formatting = { "cbfmt" }
+  },
   pascal = {
     formatting = { "ptop" }
   },
   perl = {
-    formatting = { "perltidy" }
+    formatting = { "perlimports", "perltidy" }
   },
   pgsql = {
     formatting = { "pg_format" }
   },
   php = {
     diagnostics = { "php", "phpcs", "phpmd", "phpstan", "psalm" },
-    formatting = { "phpcbf", "phpcsfixer" }
+    formatting = { "phpcbf", "phpcsfixer", "pint" }
   },
   prisma = {
     formatting = { "prismaFmt" }
@@ -234,7 +258,7 @@ return {
   python = {
     code_actions = { "refactoring" },
     diagnostics = { "flake8", "mypy", "pydocstyle", "pylama", "pylint", "pyproject_flake8", "semgrep", "vulture" },
-    formatting = { "autopep8", "black", "isort", "reorder_python_imports", "yapf" }
+    formatting = { "autopep8", "black", "blue", "isort", "reorder_python_imports", "usort", "yapf" }
   },
   qml = {
     diagnostics = { "qmllint" },
@@ -245,6 +269,9 @@ return {
   },
   racket = {
     formatting = { "raco_fmt" }
+  },
+  rego = {
+    diagnostics = { "opacheck" }
   },
   rescript = {
     formatting = { "rescript" }
@@ -276,7 +303,7 @@ return {
   sh = {
     code_actions = { "shellcheck" },
     diagnostics = { "shellcheck" },
-    formatting = { "shellharden", "shfmt" }
+    formatting = { "beautysh", "shellharden", "shfmt" }
   },
   solidity = {
     diagnostics = { "solhint" }
@@ -286,7 +313,7 @@ return {
   },
   sql = {
     diagnostics = { "sqlfluff" },
-    formatting = { "pg_format", "sqlfluff", "sqlformat" }
+    formatting = { "pg_format", "sql_formatter", "sqlfluff", "sqlformat" }
   },
   stylus = {
     diagnostics = { "stylint" }
@@ -352,7 +379,7 @@ return {
     formatting = { "tidy", "xmllint" }
   },
   yaml = {
-    diagnostics = { "actionlint", "yamllint" },
+    diagnostics = { "actionlint", "cfn_lint", "yamllint" },
     formatting = { "prettier", "prettier_d_slim", "prettierd" }
   },
   ["yaml.ansible"] = {
@@ -362,6 +389,7 @@ return {
     formatting = { "zigfmt" }
   },
   zsh = {
-    diagnostics = { "zsh" }
+    diagnostics = { "zsh" },
+    formatting = { "beautysh" }
   }
 }

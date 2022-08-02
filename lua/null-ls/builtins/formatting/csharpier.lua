@@ -4,16 +4,18 @@ local methods = require("null-ls.methods")
 local FORMATTING = methods.internal.FORMATTING
 
 return h.make_builtin({
-    name = "fourmolu",
+    name = "csharpier",
     meta = {
-        url = "https://hackage.haskell.org/package/fourmolu",
-        description = "Fourmolu is a formatter for Haskell source code.",
+        url = "https://csharpier.com/",
+        description = "CSharpier is an opinionated code formatter for c#",
     },
     method = FORMATTING,
-    filetypes = { "haskell" },
+    filetypes = { "cs" },
     generator_opts = {
-        command = "fourmolu",
-        args = { "--stdin-input-file", "$FILEPATH" },
+        command = "dotnet-csharpier",
+        args = {
+            "--write-stdout",
+        },
         to_stdin = true,
     },
     factory = h.formatter_factory,

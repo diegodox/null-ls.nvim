@@ -1096,4 +1096,150 @@ describe("diagnostics", function()
             }, diagnostic)
         end)
     end)
+
+    describe("mypy", function()
+        local linter = diagnostics.mypy
+        local parser = linter._opts.on_output
+        it("should handle full diagnostic", function()
+            local output =
+                'test.py:1:1: error: Library stubs not installed for "requests" (or incompatible with Python 3.9)  [import]'
+            local diagnostic = parser(output, {})
+            assert.same({
+                row = "1",
+                col = "1",
+                severity = 1,
+                message = 'Library stubs not installed for "requests" (or incompatible with Python 3.9)',
+                filename = "test.py",
+                code = "import",
+            }, diagnostic)
+        end)
+
+        it("should diagnostic without code", function()
+            local output = 'test.py:1:1: note: Hint: "python3 -m pip install types-requests"'
+            local diagnostic = parser(output, {})
+            assert.same({
+                row = "1",
+                col = "1",
+                severity = 3,
+                message = 'Hint: "python3 -m pip install types-requests"',
+                filename = "test.py",
+            }, diagnostic)
+        end)
+
+        it("should handle diagnostic with no column or error code", function()
+            local output = [[tests/slack_app/conftest.py:10: error: Unused "type: ignore" comment]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                row = "10",
+                severity = 1,
+                message = 'Unused "type: ignore" comment',
+                filename = "tests/slack_app/conftest.py",
+            }, diagnostic)
+        end)
+    end)
+
+    describe("opacheck", function()
+        local linter = diagnostics.opacheck
+        local parser = linter._opts.on_output
+
+        it("should create a diagnostic with error severity", function()
+            local output = vim.json.decode([[
+            {
+              "errors": [
+                {
+                  "message": "var tenant_id is unsafe",
+                  "code": "rego_unsafe_var_error",
+                  "location": {
+                    "file": "src/geo.rego",
+                    "row": 49,
+                    "col": 3
+                  }
+                }
+              ]
+            } ]])
+            local diagnostic = parser({ output = output })
+            assert.same({
+                {
+                    row = 49,
+                    col = 3,
+                    severity = 1,
+                    message = "var tenant_id is unsafe",
+                    filename = "src/geo.rego",
+                    source = "opacheck",
+                    code = "rego_unsafe_var_error",
+                },
+            }, diagnostic)
+        end)
+
+        it("should not create a diagnostic without location", function()
+            local output = vim.json.decode([[
+            {
+              "errors": [
+                {
+                  "message": "var tenant_id is unsafe",
+                  "code": "rego_unsafe_var_error"
+                }
+              ]
+            } ]])
+            local diagnostic = parser({ output = output })
+            assert.same({}, diagnostic)
+        end)
+    end)
+    describe("glslc", function()
+        local linter = diagnostics.glslc
+        local parser = linter._opts.on_output
+
+        -- some of the example output gotten from: https://github.com/google/shaderc/blob/main/glslc/test/messages_tests.py
+        it("glslc error", function()
+            local output =
+                [[glslc: error: 'path/to/tempfile.glsl': .glsl file encountered but no -fshader-stage specified ahead]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                severity = 1,
+                message = ".glsl file encountered but no -fshader-stage specified ahead",
+            }, diagnostic)
+        end)
+        it("line error with quotes", function()
+            local output =
+                [[filename.glsl:14: error: 'non-opaque uniforms outside a block' : not allowed when using GLSL for Vulkan]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename.glsl",
+                row = "14",
+                severity = 1,
+                message = "'non-opaque uniforms outside a block' : not allowed when using GLSL for Vulkan",
+            }, diagnostic)
+        end)
+        it("line error with empty quotes", function()
+            local output = [[filename2.glsl:2: error: '' : function does not return a value: main]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename2.glsl",
+                row = "2",
+                severity = 1,
+                message = "'' : function does not return a value: main",
+            }, diagnostic)
+        end)
+        it("line warning without quotes", function()
+            local output =
+                [[filename3.glsl:2: warning: attribute deprecated in version 130; may be removed in future release]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename3.glsl",
+                row = "2",
+                severity = 2,
+                message = "attribute deprecated in version 130; may be removed in future release",
+            }, diagnostic)
+        end)
+        it("file warning", function()
+            local output =
+                [[filename4.glsl: warning: (version, profile) forced to be (400, none), while in source code it is (550, none)]]
+            local diagnostic = parser(output, {})
+            assert.same({
+                filename = "filename4.glsl",
+                severity = 2,
+                message = "(version, profile) forced to be (400, none), while in source code it is (550, none)",
+            }, diagnostic)
+        end)
+    end)
 end)

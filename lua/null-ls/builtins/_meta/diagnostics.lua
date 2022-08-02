@@ -16,6 +16,9 @@ return {
   buildifier = {
     filetypes = { "bzl" }
   },
+  cfn_lint = {
+    filetypes = { "yaml", "json" }
+  },
   checkmake = {
     filetypes = { "make" }
   },
@@ -76,6 +79,9 @@ return {
   gitlint = {
     filetypes = { "gitcommit" }
   },
+  glslc = {
+    filetypes = { "glsl" }
+  },
   golangci_lint = {
     filetypes = { "go" }
   },
@@ -108,6 +114,9 @@ return {
   },
   mypy = {
     filetypes = { "python" }
+  },
+  opacheck = {
+    filetypes = { "rego" }
   },
   php = {
     filetypes = { "php" }
